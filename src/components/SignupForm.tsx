@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { Link, useNavigate } from "react-router-dom"; // Importing Link and useNavigate for navigation
+import axios from "axios"; // Importing axios for HTTP requests
+import { Formik, Form, Field, ErrorMessage } from "formik"; // Importing Formik components for form handling
+import * as Yup from "yup"; // Importing Yup for form validation
 
+// Interface to define the structure of an address
 interface Address {
   street: string;
   city: string;
@@ -11,6 +12,7 @@ interface Address {
   zipCode: string;
 }
 
+// Interface to define the structure of the User object
 interface User {
   fullName: string;
   email: string;
@@ -20,11 +22,13 @@ interface User {
 }
 
 const SignUpForm: React.FC = () => {
+  // State variables to manage modals and error messages
   const [showModal, setShowModal] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
+  // Form validation schema using Yup
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required("Full Name is required"),
     email: Yup.string()
@@ -49,12 +53,14 @@ const SignUpForm: React.FC = () => {
       ),
   });
 
+  // Function to handle form submission
   const handleSubmit = async (values: User) => {
     try {
+      // Sending a POST request to the registration endpoint
       await axios.post("http://localhost:8080/register", values);
-      setShowModal(true);
+      setShowModal(true); // Display success modal on successful registration
     } catch (error) {
-      setShowErrorMessage(true);
+      setShowErrorMessage(true); // Display error modal on failure
       setErrorMessage(
         (error as any).response?.data?.message ||
           "An error occurred. Please try again."
@@ -62,11 +68,13 @@ const SignUpForm: React.FC = () => {
     }
   };
 
+  // Function to close the success modal and navigate to the login page
   const handleCloseModal = () => {
     setShowModal(false);
     navigate("/login");
   };
 
+  // Function to close the error modal
   const handleCloseErrorModal = () => {
     setShowErrorMessage(false);
   };
@@ -78,6 +86,7 @@ const SignUpForm: React.FC = () => {
           Sign Up
         </h3>
 
+        {/* Formik form setup */}
         <Formik
           initialValues={{
             fullName: "",
@@ -91,11 +100,12 @@ const SignUpForm: React.FC = () => {
             },
             password: "",
           }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          validationSchema={validationSchema} // Applying validation schema
+          onSubmit={handleSubmit} // Handle form submission
         >
           {({ isSubmitting }) => (
             <Form>
+              {/* Full Name field */}
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -116,6 +126,8 @@ const SignUpForm: React.FC = () => {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
+              {/* Email field */}
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -136,6 +148,8 @@ const SignUpForm: React.FC = () => {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
+              {/* Date of Birth field */}
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -156,6 +170,8 @@ const SignUpForm: React.FC = () => {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
+              {/* Street Address field */}
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -176,6 +192,8 @@ const SignUpForm: React.FC = () => {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
+              {/* City field */}
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -196,6 +214,8 @@ const SignUpForm: React.FC = () => {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
+              {/* State field */}
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -216,6 +236,8 @@ const SignUpForm: React.FC = () => {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
+              {/* Post Code (ZIP) field */}
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -236,6 +258,8 @@ const SignUpForm: React.FC = () => {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
+              {/* Password field */}
               <div className="mb-6">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -256,6 +280,8 @@ const SignUpForm: React.FC = () => {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
+              {/* Submit button */}
               <div className="flex items-center justify-between">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -307,6 +333,7 @@ const SignUpForm: React.FC = () => {
           </div>
         )}
 
+        {/* Link to login page */}
         <p className="text-center text-gray-500 text-xs mt-4">
           Already have an account? <br />
           <Link
